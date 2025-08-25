@@ -1,12 +1,14 @@
 'use client'
 
 import React, { useState } from 'react'
+import { generatePlaceholderImage, getSingleReliableImage } from '@/utils/imageUtils'
 
 interface ProductImageProps {
   src: string
   alt: string
   className?: string
   productId: string
+  category?: string
   width?: number
   height?: number
   priority?: boolean
@@ -17,12 +19,21 @@ export default function ProductImage({
   alt, 
   className = '', 
   productId, 
+  category,
   width = 400, 
   height = 300,
   priority = false 
 }: ProductImageProps) {
   const [imageLoaded, setImageLoaded] = useState(false)
-  const [imageError, setImageError] = useState(false)
+  const [fallbackLevel, setFallbackLevel] = useState(0)
+
+  // Fallback chain for reliable image loading
+  const fallbackSources = [
+    src, // Original source
+    getSingleReliableImage(productId, category, width, height), // Lorem Picsum
+    `https://placehold.co/${width}x${height}/e5e7eb/374151?text=Product`, // Placehold.co
+    generatePlaceholderImage(width, height, 'Product') // SVG data URL (always works)
+  ]
 
   const handleImageLoad = () => {
     setImageLoaded(true)
@@ -30,14 +41,11 @@ export default function ProductImage({
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     const target = e.target as HTMLImageElement
+    const nextLevel = fallbackLevel + 1
     
-    if (!imageError) {
-      // First fallback: use picsum with product ID for consistency
-      target.src = `https://picsum.photos/${width}/${height}?random=${productId}`
-      setImageError(true)
-    } else {
-      // Second fallback: use placeholder
-      target.src = `https://via.placeholder.com/${width}x${height}/e5e7eb/9ca3af?text=Product+Image`
+    if (nextLevel < fallbackSources.length) {
+      target.src = fallbackSources[nextLevel]
+      setFallbackLevel(nextLevel)
     }
   }
 
@@ -49,7 +57,7 @@ export default function ProductImage({
       )}
       
       <img
-        src={src}
+        src={fallbackSources[fallbackLevel]}
         alt={alt}
         className={className}
         onLoad={handleImageLoad}

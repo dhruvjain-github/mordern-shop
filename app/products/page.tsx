@@ -329,6 +329,7 @@ export default function ProductsPage() {
                       src={product.image}
                       alt={product.name}
                       productId={product.id}
+                      category={product.category}
                       className={`object-cover group-hover:scale-105 transition-transform duration-300 ${
                         viewMode === 'list' ? 'w-48 h-48' : 'w-full h-48'
                       }`}

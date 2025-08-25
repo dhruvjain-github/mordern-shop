@@ -84,12 +84,25 @@ export default function Hero() {
                 className="rounded-2xl shadow-2xl w-full h-auto"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement
-                  // First fallback
-                  if (!target.src.includes('placeholder') && !target.src.includes('picsum')) {
-                    target.src = 'https://picsum.photos/600/400?random=hero'
+                  // First fallback: different reliable image
+                  if (!target.src.includes('placehold')) {
+                    target.src = 'https://placehold.co/600x400/3b82f6/ffffff?text=ModernShop'
                   } else {
-                    // Second fallback
-                    target.src = 'https://via.placeholder.com/600x400/e5e7eb/9ca3af?text=Shopping+Experience'
+                    // Second fallback: SVG data URL
+                    target.src = `data:image/svg+xml;base64,${btoa(`
+                      <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+                          </linearGradient>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grad)"/>
+                        <text x="50%" y="50%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle" dy=".3em">
+                          ModernShop
+                        </text>
+                      </svg>
+                    `)}`
                   }
                 }}
                 onLoad={(e) => {

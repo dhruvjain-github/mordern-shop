@@ -88,6 +88,7 @@ export default function FeaturedProducts() {
                     src={product.image}
                     alt={product.name}
                     productId={product.id}
+                    category={product.category}
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     width={400}
                     height={192}

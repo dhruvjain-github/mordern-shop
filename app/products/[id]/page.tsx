@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Star, ShoppingCart, Heart, Share2, ArrowLeft, Plus, Minus, Check, X } from 'lucide-react'
 import { useCart } from '@/components/providers/cart-provider'
 import { Product } from '@/types'
+import { getSingleReliableImage } from '@/utils/imageUtils'
 
 export default function ProductDetailPage() {
   const params = useParams()
@@ -96,11 +97,11 @@ export default function ProductDetailPage() {
     )
   }
 
-  // Mock additional images - in real app, these would come from the product data
+  // Generate multiple reliable images for the product gallery
   const productImages = [
-    product.image,
-    product.image, // Duplicate for demo
-    product.image, // Duplicate for demo
+    getSingleReliableImage(product.id, product.category, 600, 600),
+    getSingleReliableImage(product.id, product.category, 600, 600, 1), // variant 1
+    getSingleReliableImage(product.id, product.category, 600, 600, 2), // variant 2
   ]
 
   return (
