@@ -1,0 +1,5 @@
+# Create namespace for the shopping app
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: shopping-app

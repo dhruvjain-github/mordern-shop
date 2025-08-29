@@ -1,0 +1,21 @@
+# Ingress to expose app to external traffic
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: shopping-ingress
+  namespace: shopping-app
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: modernshop.local  # Change to your domain
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: shopping-service
+            port:
+              number: 80

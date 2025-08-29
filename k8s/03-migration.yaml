@@ -1,0 +1,18 @@
+# Job to populate database with initial data
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: data-migration
+  namespace: shopping-app
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: migration
+        image: dhruvjaindocker/mordern-shop-migration:latest
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://mongodb-service:27017/ecommerce"
+        - name: DATABASE_NAME
+          value: "ecommerce"

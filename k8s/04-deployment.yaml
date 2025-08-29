@@ -1,0 +1,41 @@
+# Main shopping application deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shopping-app
+  namespace: shopping-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: shopping-app
+  template:
+    metadata:
+      labels:
+        app: shopping-app
+    spec:
+      containers:
+      - name: shopping-app
+        image: dhruvjaindocker/mordern-shop:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "3000"
+        - name: MONGODB_URI
+          value: "mongodb://mongodb-service:27017/ecommerce"
+        # Health checks for reliability
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
