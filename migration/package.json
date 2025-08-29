@@ -1,0 +1,9 @@
+{
+  "name": "ecommerce-migration",
+  "version": "1.0.0",
+  "description": "MongoDB migration for ecommerce data",
+  "main": "migrate.js",
+  "dependencies": {
+    "mongodb": "^6.0.0"
+  }
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "electronics",
+    "name": "Electronics",
+    "icon": "📱",
+    "subcategories": ["Smartphones", "Laptops", "Audio", "Cameras", "Gaming", "Smart Home"]
+  },
+  {
+    "id": "clothing",
+    "name": "Clothing",
+    "icon": "👕",
+    "subcategories": ["Jeans", "Shoes", "Outerwear", "Accessories", "Jewelry", "Bags"]
+  },
+  {
+    "id": "home",
+    "name": "Home & Kitchen",
+    "icon": "🏠",
+    "subcategories": ["Small Appliances", "Vacuum Cleaners", "Kitchen", "Furniture", "Decor", "Tools"]
+  },
+  {
+    "id": "groceries",
+    "name": "Groceries",
+    "icon": "🛒",
+    "subcategories": ["Pantry", "Grains", "Produce", "Dairy", "Meat", "Beverages"]
+  },
+  {
+    "id": "health",
+    "name": "Health & Personal Care",
+    "icon": "💊",
+    "subcategories": ["Vitamins", "Supplements", "Skincare", "Hair Care", "Fragrance", "Oral Care"]
+  },
+  {
+    "id": "sports",
+    "name": "Sports & Outdoors",
+    "icon": "⚽",
+    "subcategories": ["Tennis", "Basketball", "Running", "Cycling", "Fitness", "Outdoor Gear"]
+  },
+  {
+    "id": "automotive",
+    "name": "Automotive",
+    "icon": "🚗",
+    "subcategories": ["Parts", "Accessories", "Wheels", "Electronics", "Maintenance", "Tools"]
+  }
+]

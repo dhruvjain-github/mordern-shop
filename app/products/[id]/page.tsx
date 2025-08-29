@@ -16,6 +16,8 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1)
   const [selectedImage, setSelectedImage] = useState(0)
   const [isWishlisted, setIsWishlisted] = useState(false)
+  const [imageLoaded, setImageLoaded] = useState(false)
+  const [thumbnailsLoaded, setThumbnailsLoaded] = useState<boolean[]>([])
   const { addItem } = useCart()
 
   useEffect(() => {
@@ -23,6 +25,15 @@ export default function ProductDetailPage() {
       fetchProduct(params.id as string)
     }
   }, [params.id])
+
+  // Reset image loading states when product changes
+  useEffect(() => {
+    if (product) {
+      setImageLoaded(false)
+      setThumbnailsLoaded([false, false, false])
+      setSelectedImage(0) // Reset to first image
+    }
+  }, [product])
 
   const fetchProduct = async (id: string) => {
     setLoading(true)
@@ -98,11 +109,11 @@ export default function ProductDetailPage() {
   }
 
   // Generate multiple reliable images for the product gallery
-  const productImages = [
+  const productImages = product ? [
     getSingleReliableImage(product.id, product.category, 600, 600),
     getSingleReliableImage(product.id, product.category, 600, 600, 1), // variant 1
     getSingleReliableImage(product.id, product.category, 600, 600, 2), // variant 2
-  ]
+  ] : []
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
@@ -132,7 +143,9 @@ export default function ProductDetailPage() {
               <img
                 src={productImages[selectedImage]}
                 alt={product.name}
-                className="w-full h-full object-cover rounded-lg"
+                className={`w-full h-full object-cover rounded-lg transition-opacity duration-300 ${
+                  imageLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
                 onError={(e) => {
                   const target = e.target as HTMLImageElement
                   // First fallback
@@ -143,18 +156,17 @@ export default function ProductDetailPage() {
                     target.src = 'https://via.placeholder.com/500x500/e5e7eb/9ca3af?text=Product+Image'
                   }
                 }}
-                onLoad={(e) => {
-                  const target = e.target as HTMLImageElement
-                  target.style.opacity = '1'
-                }}
-                style={{ opacity: '0', transition: 'opacity 0.3s ease-in-out' }}
+                onLoad={() => setImageLoaded(true)}
               />
             </div>
             <div className="flex space-x-2 overflow-x-auto">
               {productImages.map((image, index) => (
                 <button
                   key={index}
-                  onClick={() => setSelectedImage(index)}
+                  onClick={() => {
+                    setSelectedImage(index)
+                    setImageLoaded(false) // Reset main image loading state
+                  }}
                   className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 ${
                     selectedImage === index
                       ? 'border-primary-600'
@@ -164,7 +176,9 @@ export default function ProductDetailPage() {
                   <img
                     src={image}
                     alt={`${product.name} ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    className={`w-full h-full object-cover transition-opacity duration-300 ${
+                      thumbnailsLoaded[index] ? 'opacity-100' : 'opacity-0'
+                    }`}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement
                       // First fallback
@@ -175,11 +189,13 @@ export default function ProductDetailPage() {
                         target.src = 'https://via.placeholder.com/80x80/e5e7eb/9ca3af?text=Img'
                       }
                     }}
-                    onLoad={(e) => {
-                      const target = e.target as HTMLImageElement
-                      target.style.opacity = '1'
+                    onLoad={() => {
+                      setThumbnailsLoaded(prev => {
+                        const newLoaded = [...prev]
+                        newLoaded[index] = true
+                        return newLoaded
+                      })
                     }}
-                    style={{ opacity: '0', transition: 'opacity 0.3s ease-in-out' }}
                   />
                 </button>
               ))}

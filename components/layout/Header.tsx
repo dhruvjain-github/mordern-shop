@@ -11,12 +11,18 @@ import { ShoppingCart, Sun, Moon, Menu, X, User, Heart, LogOut } from 'lucide-re
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
   const { getTotalItems } = useCart()
   const { user, signOut } = useAuth()
   const userMenuRef = useRef<HTMLDivElement>(null)
 
   const totalItems = getTotalItems()
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Close user menu when clicking outside
   useEffect(() => {
@@ -101,7 +107,7 @@ export default function Header() {
               onClick={toggleTheme}
               className="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
             >
-              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {mounted ? (theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />) : <Sun className="w-5 h-5" />}
             </button>
 
             {/* Wishlist */}
